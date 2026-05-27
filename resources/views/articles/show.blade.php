@@ -4,6 +4,7 @@
 @php
 $priorityColors = ['critical'=>'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300','high'=>'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300','medium'=>'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300','low'=>'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'];
 $priorityLabels = ['critical'=>'Crítica','high'=>'Alta','medium'=>'Média','low'=>'Baixa'];
+$mimeIcons = ['application/pdf'=>'ti-file-type-pdf','image/png'=>'ti-photo','image/jpeg'=>'ti-photo','image/gif'=>'ti-photo','image/webp'=>'ti-photo','application/zip'=>'ti-file-zip','text/plain'=>'ti-file-text','application/json'=>'ti-file-code'];
 @endphp
 
 <div class="max-w-4xl mx-auto">
@@ -30,15 +31,15 @@ $priorityLabels = ['critical'=>'Crítica','high'=>'Alta','medium'=>'Média','low
 
         <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400 pb-4 border-b border-gray-100 dark:border-gray-700">
             <span class="flex items-center gap-1">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                <i class="ti ti-user text-base" aria-hidden="true"></i>
                 {{ $article->author->name }}
             </span>
             <span class="flex items-center gap-1">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <i class="ti ti-calendar text-base" aria-hidden="true"></i>
                 {{ $article->published_at->format('d/m/Y') }}
             </span>
             <span class="flex items-center gap-1">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                <i class="ti ti-eye text-base" aria-hidden="true"></i>
                 {{ $article->views }} visualizações
             </span>
             @if($article->requester)
@@ -46,7 +47,6 @@ $priorityLabels = ['critical'=>'Crítica','high'=>'Alta','medium'=>'Média','low
             @endif
         </div>
 
-        {{-- Tags --}}
         @if($article->tags->count())
         <div class="flex flex-wrap gap-2 mt-4">
             @foreach($article->tags as $tag)
@@ -62,20 +62,87 @@ $priorityLabels = ['critical'=>'Crítica','high'=>'Alta','medium'=>'Média','low
     </div>
 
     {{-- Anexos --}}
-    @if($article->attachments->count())
     <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 mb-6">
-        <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Anexos</h3>
-        <div class="space-y-2">
-            @foreach($article->attachments as $attachment)
-            <a href="{{ Storage::url($attachment->path) }}" target="_blank" class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900 transition">
-                <svg class="w-5 h-5 text-indigo-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
-                <span class="text-sm text-gray-700 dark:text-gray-300 truncate">{{ $attachment->filename }}</span>
-                <span class="text-xs text-gray-400 ml-auto">{{ number_format($attachment->size / 1024, 1) }} KB</span>
-            </a>
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                <i class="ti ti-paperclip text-base text-gray-400" aria-hidden="true"></i>
+                Anexos
+                @if($article->attachments->count())
+                <span class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded-full">{{ $article->attachments->count() }}</span>
+                @endif
+            </h3>
+        </div>
+
+        {{-- Lista de anexos --}}
+        @if($article->attachments->count())
+        <div class="space-y-2 mb-5">
+            @foreach($article->attachments as $att)
+            <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl group">
+                <i class="ti {{ $mimeIcons[$att->mime_type] ?? 'ti-file' }} text-xl text-indigo-500 flex-shrink-0" aria-hidden="true"></i>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">{{ $att->filename }}</p>
+                    <p class="text-xs text-gray-400">{{ number_format($att->size / 1024, 1) }} KB · {{ $att->created_at->format('d/m/Y') }} · {{ $att->uploader->name }}</p>
+                </div>
+                <a href="{{ Storage::url($att->path) }}" target="_blank"
+                   class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline flex-shrink-0">
+                    Baixar
+                </a>
+                @if(auth()->user()->isAdmin() || $att->uploaded_by === auth()->id())
+                <form method="POST" action="{{ route('attachments.destroy', [$article, $att]) }}" onsubmit="return confirm('Remover anexo?')">
+                    @csrf @method('DELETE')
+                    <button type="submit" class="text-xs text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition ml-1" aria-label="Remover">
+                        <i class="ti ti-x text-base" aria-hidden="true"></i>
+                    </button>
+                </form>
+                @endif
+            </div>
             @endforeach
         </div>
+        @else
+        <p class="text-sm text-gray-400 dark:text-gray-500 mb-4">Nenhum anexo ainda.</p>
+        @endif
+
+        {{-- Upload --}}
+        @can('update', $article)
+        <form method="POST" action="{{ route('attachments.store', $article) }}"
+              enctype="multipart/form-data"
+              x-data="{ files: [], dragging: false }"
+              @dragover.prevent="dragging = true"
+              @dragleave.prevent="dragging = false"
+              @drop.prevent="dragging = false; files = Array.from($event.dataTransfer.files); $refs.input.files = $event.dataTransfer.files">
+            @csrf
+
+            <div :class="dragging ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20' : 'border-gray-200 dark:border-gray-600 hover:border-indigo-400'"
+                 class="border-2 border-dashed rounded-xl p-5 text-center transition cursor-pointer"
+                 @click="$refs.input.click()">
+                <i class="ti ti-cloud-upload text-2xl text-gray-400 mb-2" aria-hidden="true"></i>
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    <span class="text-indigo-600 dark:text-indigo-400 font-medium">Clique para selecionar</span>
+                    ou arraste arquivos aqui
+                </p>
+                <p class="text-xs text-gray-400 mt-1">PDF, Word, Excel, imagens, ZIP — máx. 10MB por arquivo (até 5)</p>
+                <input type="file" name="files[]" multiple x-ref="input" class="hidden"
+                       @change="files = Array.from($event.target.files)"
+                       accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.gif,.webp,.txt,.md,.yaml,.yml,.json,.sh,.zip">
+            </div>
+
+            <template x-if="files.length">
+                <div class="mt-3 space-y-1">
+                    <template x-for="f in files" :key="f.name">
+                        <div class="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 px-3 py-2 rounded-lg">
+                            <i class="ti ti-file text-base text-indigo-400" aria-hidden="true"></i>
+                            <span x-text="f.name" class="flex-1 truncate"></span>
+                            <span x-text="(f.size/1024).toFixed(1) + ' KB'" class="text-gray-400"></span>
+                        </div>
+                    </template>
+                    <button type="submit" class="mt-2 w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium py-2 rounded-xl transition">
+                        Enviar @{{ files.length }} arquivo(s)
+                    </button>
+                </div>
+            </template>
+        </form>
+        @endcan
     </div>
-    @endif
 
     {{-- Ações --}}
     <div class="flex items-center gap-3">

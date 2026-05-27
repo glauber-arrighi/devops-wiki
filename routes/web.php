@@ -21,6 +21,10 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
     // ─── Artigos ─────────────────────────────────────────────────
     Route::resource('articles', \App\Http\Controllers\ArticleController::class);
 
+    // ─── Anexos ──────────────────────────────────────────────────
+    Route::post('articles/{article}/attachments', [\App\Http\Controllers\AttachmentController::class, 'store'])->name('attachments.store');
+    Route::delete('articles/{article}/attachments/{attachment}', [\App\Http\Controllers\AttachmentController::class, 'destroy'])->name('attachments.destroy');
+
     // ─── Admin ───────────────────────────────────────────────────
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::resource('users',  \App\Http\Controllers\Admin\UserController::class);
@@ -36,3 +40,4 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
 Route::middleware(['auth','verified','active','role:admin'])
     ->get('/settings', fn() => redirect()->route('admin.users.index'))
     ->name('settings');
+
