@@ -25,7 +25,6 @@ return new class extends Migration {
             $table->index('priority');
             $table->index('product');
             $table->index('area');
-            $table->fullText(['title', 'excerpt']);
         });
     }
     public function down(): void { Schema::dropIfExists('articles'); }
