@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('settings.layout')
 @section('title', 'Tags')
-@section('content')
+@section('settings-content')
 <div class="flex items-center justify-between mb-6">
     <h1 class="text-2xl font-bold">Tags</h1>
     <a href="{{ route('admin.tags.create') }}" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-xl transition">

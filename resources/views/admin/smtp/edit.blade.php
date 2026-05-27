@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('settings.layout')
 @section('title', 'Configuração SMTP')
-@section('content')
+@section('settings-content')
 <div class="max-w-2xl mx-auto">
     <h1 class="text-2xl font-bold mb-2">Configuração de e-mail</h1>
     <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Configure o servidor SMTP para envio de e-mails e reset de senha.</p>

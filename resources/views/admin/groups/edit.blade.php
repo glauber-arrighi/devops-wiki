@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('settings.layout')
 @section('title', 'Editar grupo')
-@section('content')
+@section('settings-content')
 <div class="max-w-lg mx-auto">
     <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-6">
         <a href="{{ route('admin.groups.index') }}" class="hover:text-indigo-600 transition">Grupos</a>

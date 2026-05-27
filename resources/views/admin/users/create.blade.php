@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('settings.layout')
 @section('title', 'Novo usuário')
-@section('content')
+@section('settings-content')
 <div class="max-w-2xl mx-auto">
     <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-6">
         <a href="{{ route('admin.users.index') }}" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Usuários</a>

@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('settings.layout')
 @section('title', 'Usuários')
-@section('content')
+@section('settings-content')
 <div class="flex items-center justify-between mb-6">
     <div>
         <h1 class="text-2xl font-bold">Usuários</h1>

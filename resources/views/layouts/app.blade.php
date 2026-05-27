@@ -30,7 +30,7 @@
                     <a href="{{ route('articles.create') }}" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Novo artigo</a>
                 @endif
                 @if(auth()->user()->isAdmin())
-                    <a href="{{ route('admin.users.index') }}" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Admin</a>
+                    <a href="{{ route('settings') }}" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Admin</a>
                 @endif
             </div>
 

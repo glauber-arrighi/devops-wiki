@@ -15,6 +15,7 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // ─── Artigos ─────────────────────────────────────────────────
@@ -30,3 +31,8 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
         Route::post('smtp/test',  [\App\Http\Controllers\Admin\SmtpController::class, 'test'])->name('smtp.test');
     });
 });
+
+// Atalho /settings → usuários
+Route::middleware(['auth','verified','active','role:admin'])
+    ->get('/settings', fn() => redirect()->route('admin.users.index'))
+    ->name('settings');
