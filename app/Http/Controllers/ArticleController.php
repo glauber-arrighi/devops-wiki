@@ -7,9 +7,12 @@ use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ArticleController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index(Request $request)
     {
         $user = Auth::user();
@@ -37,8 +40,8 @@ class ArticleController extends Controller
         }
 
         $articles = $query->latest('published_at')->paginate(12)->withQueryString();
-        $tags = Tag::orderBy('name')->get();
-        $areas = Article::published()->visibleTo($user)->distinct()->pluck('area')->filter()->sort()->values();
+        $tags     = Tag::orderBy('name')->get();
+        $areas    = Article::published()->visibleTo($user)->distinct()->pluck('area')->filter()->sort()->values();
 
         return view('articles.index', compact('articles', 'tags', 'areas'));
     }
