@@ -90,8 +90,8 @@ $mimeIcons = ['application/pdf'=>'ti-file-type-pdf','image/png'=>'ti-photo','ima
                 @if(auth()->user()->isAdmin() || $att->uploaded_by === auth()->id())
                 <form method="POST" action="{{ route('attachments.destroy', [$article, $att]) }}" onsubmit="return confirm('Remover anexo?')">
                     @csrf @method('DELETE')
-                    <button type="submit" class="text-xs text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition ml-1" aria-label="Remover">
-                        <i class="ti ti-x text-base" aria-hidden="true"></i>
+                    <button type="submit" class="text-xs font-medium text-red-400 hover:text-red-600 transition ml-2 px-2 py-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20">
+                        Excluir
                     </button>
                 </form>
                 @endif
