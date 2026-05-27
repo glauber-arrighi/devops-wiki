@@ -1,58 +1,80 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# DevOps Wiki
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Base de conhecimento para times DevOps — Laravel 11, Docker e boas práticas de segurança.
 
-## About Laravel
+![Laravel](https://img.shields.io/badge/Laravel-11-FF2D20?style=flat-square&logo=laravel)
+![PHP](https://img.shields.io/badge/PHP-8.3-777BB4?style=flat-square&logo=php)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat-square&logo=mysql)
+![Redis](https://img.shields.io/badge/Redis-7.2-DC382D?style=flat-square&logo=redis)
+![Tailwind](https://img.shields.io/badge/Tailwind-CSS-06B6D4?style=flat-square&logo=tailwindcss)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Sobre
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Portal de gestão de conhecimento técnico com controle de acesso por roles e grupos de atuação. Case de portfólio DevOps demonstrando infraestrutura containerizada, segurança aplicada e desenvolvimento Laravel.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Funcionalidades
 
-## Learning Laravel
+- Artigos com Markdown, prioridade, produto, área, solicitante e tags
+- Controle de acesso: roles (admin/editor/viewer) e grupos de atuação
+- Segmentação de conteúdo por grupo — usuário vê apenas artigos do seu grupo
+- Painel admin: usuários, grupos, tags e configuração SMTP
+- Dark/light mode automático (SO) com toggle manual
+- Busca e filtros por prioridade, área e tag
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Stack
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Camada | Tecnologia |
+|---|---|
+| Backend | Laravel 11 + PHP 8.3 |
+| Frontend | Blade + Tailwind CSS + Alpine.js |
+| Banco | MySQL 8.0 |
+| Cache / Sessão | Redis 7.2 |
+| Proxy | nginx 1.25 |
+| Containers | Docker Compose |
+| Assets | Vite 8 + Node 22 |
+| Auth | Laravel Breeze |
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## Como rodar
 
-## Agentic Development
+Requisitos: Docker, Docker Compose, Node 22+
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+    git clone git@github.com:glauber-arrighi/devops-wiki.git
+    cd devops-wiki
+    cp .env.example .env
+    make setup
 
-```bash
-composer require laravel/boost --dev
+Acesse http://localhost:8080
 
-php artisan boost:install
-```
+    Login: admin@devops-wiki.local
+    Senha: Admin@2026!
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Comandos
 
-## Contributing
+    make up        # Sobe containers
+    make down      # Para containers
+    make shell     # Acessa container app
+    make fresh-db  # Recria banco do zero
+    make logs      # Logs em tempo real
+    make test      # Roda testes
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Segurança
 
-## Code of Conduct
+- Headers HTTP via nginx (X-Frame-Options, X-Content-Type-Options)
+- CSRF, rate limiting, validação de senha complexa
+- Senha SMTP com encrypted cast do Laravel
+- Middleware de role e bloqueio de usuários inativos
+- Variáveis sensíveis apenas em .env (nunca commitadas)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Roadmap
 
-## Security Vulnerabilities
+- [ ] Upload de anexos
+- [ ] Editor TipTap (rich text)
+- [ ] Reset de senha por e-mail
+- [ ] Deploy GCP com Cloud Run + Cloud SQL
+- [ ] CI/CD com GitHub Actions
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Autor
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Glauber Arrighi — DevOps Engineer
+https://github.com/glauber-arrighi
