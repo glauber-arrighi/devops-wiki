@@ -58,7 +58,7 @@ $mimeIcons = ['application/pdf'=>'ti-file-type-pdf','image/png'=>'ti-photo','ima
 
     {{-- Conteúdo --}}
     <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-8 mb-6 prose prose-gray dark:prose-invert max-w-none">
-        {!! nl2br(e($article->content)) !!}
+        {!! $article->contentHtml() !!}
     </div>
 
     {{-- Anexos --}}

@@ -7,9 +7,9 @@
 </div>
 
 <div>
-    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Conteúdo *</label>
-    <textarea name="content" rows="12" required class="w-full text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono">{{ old('content', $editing ? $article->content : '') }}</textarea>
-    <p class="text-xs text-gray-400 mt-1">Suporte a Markdown. Imagens e tabelas aceitas.</p>
+    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Conteúdo *</label>
+    <x-editor name="content" :value="old('content', $editing ? $article->content : '')" />
+    @error('content')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
 </div>
 
 <div>

@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
+use League\CommonMark\CommonMarkConverter;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -17,5 +18,19 @@ class Article extends Model {
     public function scopeVisibleTo($query, User $user) {
         if ($user->isAdmin()) return $query;
         return $query->whereHas('groups', fn($q) => $q->whereIn('groups.id', $user->groups->pluck('id')));
+    }
+
+    public function contentHtml(): string
+    {
+        // Se já é HTML (começa com tag), retorna direto
+        $c = trim($this->content);
+        if (str_starts_with($c, '<')) return $this->content;
+
+        // Converte Markdown para HTML
+        $converter = new CommonMarkConverter([
+            'html_input'         => 'strip',
+            'allow_unsafe_links' => false,
+        ]);
+        return $converter->convert($this->content)->getContent();
     }
 }
