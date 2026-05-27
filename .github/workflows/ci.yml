@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches: [main, staging]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Lint + Tests + Build
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root_secret
+          MYSQL_DATABASE: devops_wiki_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+      redis:
+        image: redis:7.2-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_mysql, mbstring, exif, pcntl, bcmath, gd, zip, redis
+          coverage: none
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-
+
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Prepare environment
+        run: |
+          cp .env.example .env
+          sed -i 's/DB_HOST=db/DB_HOST=127.0.0.1/' .env
+          sed -i 's/DB_DATABASE=devops_wiki/DB_DATABASE=devops_wiki_test/' .env
+          sed -i 's/DB_USERNAME=wiki/DB_USERNAME=root/' .env
+          sed -i 's/DB_PASSWORD=wiki_secret/DB_PASSWORD=root_secret/' .env
+          sed -i 's/REDIS_HOST=redis/REDIS_HOST=127.0.0.1/' .env
+          sed -i 's/REDIS_PASSWORD=redis_secret/REDIS_PASSWORD=/' .env
+          php artisan key:generate
+
+      - name: Run migrations
+        run: php artisan migrate --force
+
+      - name: Run Pint (lint)
+        run: vendor/bin/pint --test
+        continue-on-error: true
+
+      - name: Run tests
+        run: php artisan test --compact
