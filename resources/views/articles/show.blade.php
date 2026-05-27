@@ -136,7 +136,7 @@ $mimeIcons = ['application/pdf'=>'ti-file-type-pdf','image/png'=>'ti-photo','ima
                         </div>
                     </template>
                     <button type="submit" class="mt-2 w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium py-2 rounded-xl transition">
-                        Enviar @{{ files.length }} arquivo(s)
+                        Enviar <span x-text="files.length"></span> arquivo(s)
                     </button>
                 </div>
             </template>
