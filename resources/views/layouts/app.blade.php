@@ -26,6 +26,7 @@
             {{-- Nav links --}}
             <div class="hidden md:flex items-center gap-6">
                 <a href="{{ route('articles.index') }}" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Artigos</a>
+                <a href="{{ route('contexts.index') }}" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Contextos</a>
                 @if(auth()->user()->isEditor())
                     <a href="{{ route('articles.create') }}" class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Novo artigo</a>
                 @endif

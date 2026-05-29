@@ -28,7 +28,7 @@ class Article extends Model {
 
         // Converte Markdown para HTML
         $converter = new CommonMarkConverter([
-            'html_input'         => 'strip',
+            'html_input'         => 'allow',
             'allow_unsafe_links' => false,
         ]);
         return $converter->convert($this->content)->getContent();
